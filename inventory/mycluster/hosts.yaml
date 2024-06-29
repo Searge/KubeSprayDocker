@@ -1,0 +1,42 @@
+all:
+  hosts:
+    k8s-lb:
+      ansible_host: k8s-lb
+      ip: 10.0.0.9
+      access_ip: 10.0.1.9
+      ansible_user: core
+    controlplane:
+      ansible_host: controlplane
+      ip: 10.0.0.10
+      access_ip: 10.0.0.10
+      ansible_user: core
+    node1:
+      ansible_host: worker-01
+      ip: 10.0.0.11
+      access_ip: 10.0.0.11
+      ansible_user: core
+    node2:
+      ansible_host: worker-02
+      ip: 10.0.0.12
+      access_ip: 10.0.0.12
+      ansible_user: core
+  children:
+    kube_control_plane:
+      hosts:
+        controlplane:
+    kube_node:
+      hosts:
+        controlplane:
+        node1:
+        node2:
+    etcd:
+      hosts:
+        controlplane:
+        node1:
+        node2:
+    k8s_cluster:
+      children:
+        kube_control_plane:
+        kube_node:
+    calico_rr:
+      hosts: {}

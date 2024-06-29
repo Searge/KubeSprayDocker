@@ -1,0 +1,11 @@
+version: "3"
+services:
+  kubespray:
+    build:
+      context: .
+      args:
+        DOCKER_IMAGE: ${DOCKER_IMAGE}
+    image: ${CUSTOM_IMAGE}
+    volumes:
+      - .:/kubespray
+    # user: "1000:1000"  # Run as user 1000
