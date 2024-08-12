@@ -1,11 +1,30 @@
-version: "3"
+name: local
 services:
   kubespray:
+    container_name: kubespray_local
+    annotations:
+      app.stack: ansible
     build:
       context: .
+      dockerfile: Dockerfile
       args:
         DOCKER_IMAGE: ${DOCKER_IMAGE}
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
     image: ${CUSTOM_IMAGE}
+    user: ${USER_ID:-1000}:${GROUP_ID:-1000}
     volumes:
-      - .:/kubespray
-    # user: "1000:1000"  # Run as user 1000
+      - ./inventory:/home/kubespray/inventory:rw,z
+    environment:
+      - HOME=/home/kubespray
+      - ANSIBLE_CONFIG=/kubespray/ansible.cfg
+    working_dir: /kubespray
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        echo 'Starting container'
+        ls -la /home/kubespray/inventory
+        ls -la /home/kubespray/.ssh
+        echo 'Container ready'
+        tail -f /dev/null
+    tty: true
