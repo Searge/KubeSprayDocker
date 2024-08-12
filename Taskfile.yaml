@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+# https://taskfile.dev
+
+version: "3"
+
+dotenv:
+  - .env
+
+tasks:
+  default:
+    aliases: [ "run" ]
+    desc: "run ansible commands inside the container"
+    cmds:
+      - bash ./scripts/run.sh {{.CLI_ARGS}}
+
+  up:
+    cmds:
+      - bash ./scripts/dock.sh up
+
+  down:
+    cmds:
+      - bash ./scripts/dock.sh down
+
+  start:
+    cmds:
+      - bash ./scripts/dock.sh start
+
+  stop:
+    cmds:
+      - bash ./scripts/dock.sh stop
+
+  ps:
+    cmds:
+      - bash ./scripts/dock.sh ps
+
+  shell:
+    cmds:
+      - bash ./scripts/dock.sh shell
+
+  cleanup:
+    cmds:
+      - bash ./scripts/dock.sh cleanup

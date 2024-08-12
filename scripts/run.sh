@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+# This script is used to run Kubespray in Docker.
+# It checks if Docker is installed and pulls the Kubespray image if it is not present.
+# It then runs the Kubespray commands inside the container.
+#
+# Usage:
+#   ./run.sh [command] [arguments]
+#
+# Example:
+#   ./run.sh cluster mycluster
+#   ./run.sh generate .env.generate
 set -e
 
 ARGS=("$@")
@@ -16,18 +26,6 @@ if [ -x "$(command -v podman)" ]; then
 else
   export DOCKER=docker
 fi
-
-# Check if docker image is present in the system
-# If not, pull the image
-if [ -z "$($DOCKER images -q "${DOCKER_IMAGE}" 2> /dev/null)" ]; then
-  echo "Docker image not found. Pulling the image..."
-  $DOCKER pull "${DOCKER_IMAGE}"
-fi
-
-function cleanup {
-  # Function to clean up the docker image
-  $DOCKER rmi "${DOCKER_IMAGE}"
-}
 
 function run_cmd_in_container {
   # Function to run a command in the container
