@@ -10,7 +10,7 @@ ARGS=("$@")
 WD="$(dirname "${BASH_SOURCE[0]}")"
 cd "$WD"/.. && pwd
 
-source .env
+source ./.env
 
 # If podman installed use podman instead of docker
 if [ -x "$(command -v podman)" ]; then
@@ -30,6 +30,7 @@ fi
 
 function up {
   # Function to start the docker image
+  echo "Building and starting the docker image..."
   if [ "$_is_docker_" = true ]; then
     $DOCKER compose up -d
   else
@@ -39,6 +40,7 @@ function up {
 
 function down {
   # Function to stop the docker image
+  echo "Deleting the container..."
   if [ "$_is_docker_" = true ]; then
     $DOCKER compose down
   else
@@ -48,14 +50,17 @@ function down {
 
 function start {
   # Function to start the docker image
+  echo "Starting the docker image..."
   if [ "$_is_docker_" = true ]; then
     $DOCKER compose start
   else
     podman-compose start
+  fi
 }
 
 function stop {
   # Function to stop the docker image
+  echo "Stopping the docker image..."
   if [ "$_is_docker_" = true ]; then
     $DOCKER compose stop
   else
@@ -65,6 +70,7 @@ function stop {
 
 function  ps {
   # Function to list the docker image
+  echo "Listing the docker image..."
   if [ "$_is_docker_" = true ]; then
     $DOCKER compose ps
   else
@@ -74,11 +80,13 @@ function  ps {
 
 function shell {
   # Function to open a shell in the docker image
+  echo "Opening a shell in the docker image..."
   $DOCKER exec -it kubespray_local /bin/bash
 }
 
 function cleanup {
   # Function to cleanup the docker image
+  echo "Cleaning up the docker image..."
   if [ "$_is_docker_" = true ]; then
     $DOCKER compose down -v
     $DOCKER rmi "${CUSTOM_IMAGE}"
@@ -93,11 +101,11 @@ function help {
   echo "Usage: $0 [command]"
   echo ""
   echo "Commands:"
-  echo "  up       Start the docker image"
-  echo "  down     Stop the docker image"
-  echo "  start    Start the docker image"
-  echo "  stop     Stop the docker image"
-  echo "  ps       List the docker image"
+  echo "  up       Build and start the docker image"
+  echo "  down     Delete the docker container"
+  echo "  start    Start the docker container"
+  echo "  stop     Stop the docker container"
+  echo "  ps       List the docker container"
   echo "  shell    Open a shell in the docker image"
   echo "  cleanup  Cleanup the docker image"
 }
