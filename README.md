@@ -32,41 +32,59 @@ This project provides a streamlined way to deploy a Kubernetes cluster using Kub
 
 ## Usage
 
-### Generate Inventory
+This project uses Task for running common operations. Here are some available commands:
 
-To generate inventory, create a dedicated `.env` file for the generate command. For example:
+- `task start`: Start the container
+- `task up`: Build and start the container
+- `task down`: Stop and remove the container
+- `task stop`: Stop the container
+- `task ps`: Show container status
+- `task shell`: Open a shell in the container
+- `task cleanup`: Remove the container and associated volumes
 
-```sh
-# .env.generate
-CLUSTER_NAME=cluster1
-IPS=(10.0.0.20 10.0.0.21)
-```
+To deploy a Kubernetes cluster:
 
-Then run the script with the following command:
+1. Generate the inventory:
 
-```bash
-./run.sh generate .env.generate
-```
+   ```bash
+   task shell
+   ./scripts/generate-inventory.sh .env.local
+   exit
+   ```
 
-### Deploy Cluster
+2. Deploy the cluster:
 
-To deploy a cluster, create a dedicated `.env` file for the deploy command. For example:
+   ```bash
+   task shell
+   ./scripts/run.sh cluster
+   ```
 
-```sh
-# .env/.env.deploy
-CLUSTER_NAME=cluster1
-```
+3. To reset the cluster:
 
-Then run the script inside the Docker container with the following command:
+   ```bash
+   task shell
+   ./scripts/run.sh reset
+   ```
 
-```bash
-./run.sh cluster $CLUSTER_NAME
-```
+## Configuration
 
-### Clean Up
+- Modify `cluster-variables.yaml` to customize your cluster configuration.
+- Update `hosts.yaml` to specify your cluster nodes.
 
-To clean up Docker images after use, run the following command:
+## Directory Structure
 
-```bash
-task cleanup
-```
+- `inventory/`: Contains cluster-specific configurations and variables.
+- `scripts/`: Helper scripts for managing the deployment process.
+- `ssh/`: SSH keys and configuration for connecting to cluster nodes.
+
+## Troubleshooting
+
+If you encounter issues:
+
+1. Check the logs: `docker logs kubespray_local`
+2. Ensure your SSH keys are correctly set up in the `ssh/` directory.
+3. Verify that the IP addresses in `hosts.yaml` are correct and accessible.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
