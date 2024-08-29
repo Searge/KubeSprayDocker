@@ -15,7 +15,11 @@ services:
     user: ${USER_ID:-1000}:${GROUP_ID:-1000}
     volumes:
       - ./inventory:/home/kubespray/inventory:rw,z
+      - ./scripts:/kubespray/scripts:rw,z
+      - ./.env:/kubespray/.env:ro,z
+      - $SSH_AUTH_SOCK:/ssh-agent
     environment:
+      - SSH_AUTH_SOCK=/ssh-agent
       - HOME=/home/kubespray
       - ANSIBLE_CONFIG=/kubespray/ansible.cfg
     working_dir: /kubespray
