@@ -7,36 +7,45 @@ dotenv:
   - .env
 
 tasks:
-  default:
-    aliases: [ "run" ]
-    desc: "run ansible commands inside the container"
+  start:
+    aliases:
+      - default
+    desc: "start the container"
     cmds:
-      - bash ./scripts/run.sh {{.CLI_ARGS}}
+      - bash ./scripts/dock.sh start
 
   up:
+    desc: "up the container"
     cmds:
       - bash ./scripts/dock.sh up
 
   down:
+    desc: "down the container"
     cmds:
       - bash ./scripts/dock.sh down
 
-  start:
-    cmds:
-      - bash ./scripts/dock.sh start
 
   stop:
+    desc: "stop the container"
     cmds:
       - bash ./scripts/dock.sh stop
 
   ps:
+    desc: "ps the container"
     cmds:
       - bash ./scripts/dock.sh ps
 
   shell:
+    desc: "shell in the container"
     cmds:
       - bash ./scripts/dock.sh shell
 
   cleanup:
+    desc: "cleanup the container"
+    summary: |
+      For cleaning up the container.
+
+      This is a destructive action. It will remove all the files in the container.
+      Use it with caution.
     cmds:
       - bash ./scripts/dock.sh cleanup
