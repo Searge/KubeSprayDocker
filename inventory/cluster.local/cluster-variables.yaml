@@ -24,6 +24,7 @@ metrics_server_enabled: true
 
 # ArgoCD deployment
 argocd_enabled: true
+argocd_version: v2.11.3
 
 # This is the user that owns tha cluster installation.
 kube_owner: kube
@@ -39,6 +40,7 @@ kube_proxy_strict_arp: true
 
 # Make a copy of kubeconfig on the host that runs Ansible in {{ inventory_dir }}/artifacts
 kubeconfig_localhost: true
+kube_network_plugin: flannel
 
 ## Supplementary addresses that can be added in kubernetes ssl keys.
 ## That can be useful for example to setup a keepalived virtual IP
@@ -47,23 +49,23 @@ kubeconfig_localhost: true
 ## Automatically renew K8S control plane certificates on first Monday of each month
 auto_renew_certificates: true
 
-# # kube-vip configuration
-# kube_vip_enabled: true
-# # HA for control-plane, requires a VIP
-# kube_vip_controlplane_enabled: true
-# kube_vip_address: 10.0.0.10
-# kube_vip_cidr: 21
-# loadbalancer_apiserver:
-#   address: "{{ kube_vip_address }}"
-#   port: 6443
-# kube_vip_interface: eth0
+# kube-vip configuration
+kube_vip_enabled: true
+# HA for control-plane, requires a VIP
+kube_vip_controlplane_enabled: true
+kube_vip_interface: end0
+kube_vip_address: 10.0.0.10
+kube_vip_cidr: 21
+loadbalancer_apiserver:
+  address: "{{ kube_vip_address }}"
+  port: 6443
 
-# # LoadBalancer for services
-# kube_vip_services_enabled: true
+# LoadBalancer for services
+kube_vip_services_enabled: false
 # kube_vip_services_interface: eth0
 
-# kube_vip_arp_enabled: true
-# kube_vip_lb_enable: true
+kube_vip_arp_enabled: true
+kube_vip_lb_enable: true
 
 # Kubernetes cluster name, also will be used as DNS domain
 cluster_name: cluster.local
