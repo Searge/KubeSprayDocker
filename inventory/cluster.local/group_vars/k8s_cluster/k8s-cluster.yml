@@ -67,7 +67,7 @@ credentials_dir: "{{ inventory_dir }}/credentials"
 
 # Choose network plugin (cilium, calico, kube-ovn, weave or flannel. Use cni for generic cni plugin)
 # Can also be set to 'cloud', which lets the cloud provider setup appropriate routing
-kube_network_plugin: calico
+kube_network_plugin: flannel
 
 # Setting multi_networking to true will install Multus: https://github.com/k8snetworkplumbingwg/multus-cni
 kube_network_plugin_multus: false
@@ -122,9 +122,9 @@ kube_apiserver_port: 6443  # (https)
 
 # Kube-proxy proxyMode configuration.
 # Can be ipvs, iptables
-kube_proxy_mode: iptables
-# kube_proxy_exclude_cidrs:
-#   - 10.207.0.0/24
+kube_proxy_mode: ipvs
+kube_proxy_exclude_cidrs:
+  - 10.0.0.0/24
 
 # configure arp_ignore and arp_announce to avoid answering ARP queries from kube-ipvs0 interface
 # must be set to true for MetalLB, kube-vip(ARP enabled) to work
@@ -177,7 +177,7 @@ dns_mode: coredns
 # Enable nodelocal dns cache
 enable_nodelocaldns: true
 enable_nodelocaldns_secondary: false
-nodelocaldns_ip: 169.254.25.10
+nodelocaldns_ip: 10.233.0.10
 nodelocaldns_health_port: 9254
 nodelocaldns_second_health_port: 9256
 nodelocaldns_bind_metrics_host_ip: false
@@ -246,7 +246,7 @@ kubernetes_audit: false
 default_kubelet_config_dir: "{{ kube_config_dir }}/dynamic_kubelet_dir"
 
 # Make a copy of kubeconfig on the host that runs Ansible in {{ inventory_dir }}/artifacts
-kubeconfig_localhost: true
+kubeconfig_localhost: false
 # Use ansible_host as external api ip when copying over kubeconfig.
 # kubeconfig_localhost_ansible_host: false
 # Download kubectl onto the host that runs Ansible in {{ bin_dir }}
@@ -304,7 +304,7 @@ kubeconfig_localhost: true
 
 ## Supplementary addresses that can be added in kubernetes ssl keys.
 ## That can be useful for example to setup a keepalived virtual IP
-supplementary_addresses_in_ssl_keys: [10.0.0.10]
+supplementary_addresses_in_ssl_keys: [10.0.0.8]
 
 ## Running on top of openstack vms with cinder enabled may lead to unschedulable pods due to NoVolumeZoneConflict restriction in kube-scheduler.
 ## See https://github.com/kubernetes-sigs/kubespray/issues/2141
@@ -376,21 +376,3 @@ kubeadm_patches:
 
 # Set to true to remove the role binding to anonymous users created by kubeadm
 remove_anonymous_access: false
-
-# kube-vip configuration
-kube_vip_enabled: true
-# HA for control-plane, requires a VIP
-kube_vip_controlplane_enabled: true
-kube_vip_address: 10.0.0.10
-kube_vip_cidr: 21
-loadbalancer_apiserver:
-  address: "{{ kube_vip_address }}"
-  port: 6443
-kube_vip_interface: eth0
-
-# LoadBalancer for services
-kube_vip_services_enabled: true
-kube_vip_services_interface: eth0
-
-kube_vip_arp_enabled: true
-kube_vip_lb_enable: true
