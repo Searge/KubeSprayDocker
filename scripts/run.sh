@@ -20,8 +20,7 @@ function play() {
   local CMD="${ARGS[@]:1}"
   ansible-playbook --flush-cache -T 30 \
     -i $INVENTORY_PATH/hosts.yaml \
-    -e @$INVENTORY_PATH/cluster-variables.yaml \
-    -b --become-user=root ${CMD:-$@}
+    -b -v --become-user=root ${CMD:-$@}
 }
 
 function cluster() {

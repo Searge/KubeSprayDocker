@@ -68,7 +68,7 @@ To deploy a Kubernetes cluster:
 
 ## Configuration
 
-- Modify `cluster-variables.yaml` to customize your cluster configuration.
+- Modify `inventory/${CLUSTER_NAME}/group_vars` to customize your cluster configuration.
 - Update `hosts.yaml` to specify your cluster nodes.
 
 ## Directory Structure
