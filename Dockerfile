@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ARG USER_ID=1000
 ARG GROUP_ID=1000
 RUN groupadd -g ${GROUP_ID} kubespray && \
-    useradd -m -u ${USER_ID} -g ${GROUP_ID} -s /bin/bash kubespray && \
+    useradd -m -u ${USER_ID} -g ${GROUP_ID} -G sudo -s /bin/bash kubespray && \
     echo "kubespray ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
     chmod 0440 /etc/sudoers && \
     mkdir -p /home/kubespray/inventory && \
